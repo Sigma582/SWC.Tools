@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2198147D-6A01-4813-8DDF-925E854B8063}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SWC.Tools.Common</RootNamespace>
+    <AssemblyName>SWC.Tools.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AuthData\AuthDataProvider.cs" />
+    <Compile Include="Enums\BaseType.cs" />
+    <Compile Include="Networking\Json\CommandArgs\GetWarParticipantCommandArguments.cs" />
+    <Compile Include="Networking\Json\CommandArgs\Position.cs" />
+    <Compile Include="Networking\Json\Commands\GetWarParticipantCommand.cs" />
+    <Compile Include="Networking\Json\Commands\UpdateWarLayoutCommand.cs" />
+    <Compile Include="Networking\Json\Entities\WarParticipant.cs" />
+    <Compile Include="Networking\Json\Messages\GetWarParticipantMessage.cs" />
+    <Compile Include="Networking\Json\Messages\UpldateWarLayoutMessage.cs" />
+    <Compile Include="ServerConstants.cs" />
+    <Compile Include="Layout\LayoutManager.cs" />
+    <Compile Include="Networking\Exception\StatusException.cs" />
+    <Compile Include="Networking\Json\CommandArgs\CommandArguments.cs" />
+    <Compile Include="Networking\Json\CommandArgs\GetAuthTokenCommandArguments.cs" />
+    <Compile Include="Networking\Json\CommandArgs\GetSquadDetailsCommandArguments.cs" />
+    <Compile Include="Networking\Json\CommandArgs\UpldateLayoutCommandArguments.cs" />
+    <Compile Include="Networking\Json\CommandArgs\PlayerLoginCommandArguments.cs" />
+    <Compile Include="Networking\Json\CommandArgs\ResoursePatameters.cs" />
+    <Compile Include="Networking\Json\CommandArgs\SearchSquadsCommandArguments.cs" />
+    <Compile Include="Networking\Json\CommandArgs\VisitNeighborCommandArguments.cs" />
+    <Compile Include="Networking\Json\Commands\Command.cs" />
+    <Compile Include="Networking\Json\Commands\GetAuthTokenCommand.cs" />
+    <Compile Include="Networking\Json\Commands\GetSquadDetailsCommand.cs" />
+    <Compile Include="Networking\Json\Commands\UpldateLayoutCommand.cs" />
+    <Compile Include="Networking\Json\Commands\PlayerLoginCommand.cs" />
+    <Compile Include="Networking\Json\Commands\SearchSquadsCommand.cs" />
+    <Compile Include="Networking\Json\Commands\VisitNeighborCommand.cs" />
+    <Compile Include="Networking\Json\Entities\ActiveArmory.cs" />
+    <Compile Include="Networking\Json\Entities\Building.cs" />
+    <Compile Include="Networking\Json\Entities\Champion.cs" />
+    <Compile Include="Networking\Json\Entities\Contraband.cs" />
+    <Compile Include="Networking\Json\Entities\Credits.cs" />
+    <Compile Include="Networking\Json\Entities\Crystals.cs" />
+    <Compile Include="Networking\Json\Entities\Droids.cs" />
+    <Compile Include="Networking\Json\Entities\Dummy.cs" />
+    <Compile Include="Networking\Json\Entities\GuildInfo.cs" />
+    <Compile Include="Networking\Json\Entities\Inventory.cs" />
+    <Compile Include="Networking\Json\Entities\Liveness.cs" />
+    <Compile Include="Networking\Json\Entities\Map.cs" />
+    <Compile Include="Networking\Json\Entities\Materials.cs" />
+    <Compile Include="Networking\Json\Entities\Member.cs" />
+    <Compile Include="Networking\Json\Entities\MembershipRestrictions.cs" />
+    <Compile Include="Networking\Json\Entities\Perks.cs" />
+    <Compile Include="Networking\Json\Entities\Player.cs" />
+    <Compile Include="Networking\Json\Entities\PlayerModel.cs" />
+    <Compile Include="Networking\Json\Entities\PlayerWrapper.cs" />
+    <Compile Include="Networking\Json\Entities\PurchaseTracking.cs" />
+    <Compile Include="Networking\Json\Entities\Reputation.cs" />
+    <Compile Include="Networking\Json\Entities\Scalars.cs" />
+    <Compile Include="Networking\Json\Entities\Squad.cs" />
+    <Compile Include="Networking\Json\Entities\SquadDetails.cs" />
+    <Compile Include="Networking\Json\Entities\Storage.cs" />
+    <Compile Include="Networking\Json\Entities\SubStorage.cs" />
+    <Compile Include="Networking\Json\Entities\Upgrades.cs" />
+    <Compile Include="Networking\Json\Entities\WarHistoryEntry.cs" />
+    <Compile Include="Networking\Json\Entities\Xp.cs" />
+    <Compile Include="Networking\Json\Messages\GetAuthTokenMessage.cs" />
+    <Compile Include="Networking\Json\Messages\GetSquadDetailsMessage.cs" />
+    <Compile Include="Networking\Json\Messages\Message.cs" />
+    <Compile Include="Networking\Json\Messages\UpldateLayoutMessage.cs" />
+    <Compile Include="Networking\Json\Messages\PlayerLoginMessage.cs" />
+    <Compile Include="Networking\Json\Messages\SearchSquadsMessage.cs" />
+    <Compile Include="Networking\Json\Messages\VisitNeighborMessage.cs" />
+    <Compile Include="Networking\Json\Responses\Data.cs" />
+    <Compile Include="Networking\Json\Responses\Response.cs" />
+    <Compile Include="Networking\MessageManager.cs" />
+    <Compile Include="Networking\MessageSender.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\TimeHelper.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
