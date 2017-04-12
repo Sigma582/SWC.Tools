@@ -1,4 +1,5 @@
-﻿using System.Windows;
+using System;
+using System.Windows;
 using SWC.Tools.LayoutManager.ViewModels;
 
 namespace SWC.Tools.LayoutManager.Views
@@ -13,8 +14,14 @@ namespace SWC.Tools.LayoutManager.Views
         public MainWindow()
         {
             DataContext = _viewModel = new MainViewModel();
-
+            _viewModel.LoginSuccessful += OnLoginSuccessful;
             InitializeComponent();
+        }
+
+        private void OnLoginSuccessful(object sender, EventArgs eventArgs)
+        {
+            LoginPanel.Visibility = Visibility.Collapsed;
+            ManagementPanel.Visibility = Visibility.Visible;
         }
     }
 }
