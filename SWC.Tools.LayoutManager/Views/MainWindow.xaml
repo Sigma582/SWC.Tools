@@ -14,20 +14,54 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="10 0 0 0"/>
         </Style>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
     </Window.Resources>
     <Grid>
-        <StackPanel Orientation="Vertical" Margin="10">
-            <TextBlock Text="Playerprefs.dat file location:" Margin="0 5"/>
+        <StackPanel x:Name="LoginPanel" Orientation="Vertical" Margin="10">
+            <TextBlock Text="Server:"/>
             <StackPanel Orientation="Horizontal">
-                <TextBox Width="650" Text="{Binding PlayerprefsPath}" IsReadOnly="True"/>
-                <Button Content="Browse..." Command="{Binding BrowseCommand}"/>
+                <RadioButton Content="Windows"
+                             GroupName="Server"
+                             Command="{Binding ServerSelectCommand}"
+                             CommandParameter="{x:Static Windows, MemberType={x:Type enums:Server}}"
+                             IsChecked="{Binding IsWindowsServer, Mode=OneWay}"/>
+                <RadioButton Content="Android"
+                             GroupName="Server"
+                             Command="{Binding ServerSelectCommand}"
+                             CommandParameter="{x:Static Android, MemberType={x:Type enums:Server}}"
+                             IsChecked="{Binding IsAndroidServer, Mode=OneWay}"
+                             Margin="10 0 0 0"/>
             </StackPanel>
-            <TextBlock Margin="0 5">
-                <Run Text="Player name: "/>
-                <Run Text="{Binding Player.Name, TargetNullValue=n/a}"/>
-            </TextBlock>
-            <Border BorderThickness="1" BorderBrush="Black" Margin="0 5 0 10"/>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel x:Name="WindowsLoginPanel" Visibility="{Binding IsWindowsServer, Converter={StaticResource VisibilityConverter}}">
+                <TextBlock Text="Playerprefs.dat file location:" Margin="0 5"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Width="650" Text="{Binding PlayerprefsPath}" IsReadOnly="True"/>
+                    <Button Content="Browse..." Command="{Binding BrowseCommand}"/>
+                </StackPanel>
+            </StackPanel>
+            <Grid x:Name="AndroidLoginPanel" Margin="0 5" Visibility="{Binding IsAndroidServer, Converter={StaticResource VisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Player ID" Margin="0 0 0 5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Width="250" Text="{Binding PlayerId, Mode=TwoWay}" Margin="5 0 0 5"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Player Secret" Margin="0 0 0 5"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Width="250" Text="{Binding PlayerSecret, Mode=TwoWay}" Margin="5 0 0 5"/>
+                <Button Grid.Row="2" Grid.Column="1" Width="90" Content="Login" Command="{Binding LoginCommand}" HorizontalAlignment="Right"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel x:Name="ManagementPanel" Orientation="Vertical" Margin="10" Visibility="Collapsed">
+            <StackPanel>
+                <TextBlock Margin="0 5">
+                    <Run Text="Player name: "/>
+                    <Run Text="{Binding Player.Name, TargetNullValue=n/a}"/>
+                </TextBlock>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

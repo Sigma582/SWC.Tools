@@ -16,7 +16,7 @@ namespace SWC.Tools.Common.Networking
 {
     public class MessageManager
     {
-        private readonly string _url = "https://n7-startswin-web-active.playdom.com/app/batch/json";
+        private readonly string _url;
         private readonly string _playerId;
         private readonly string _playerSecret;
         private string _authToken;
@@ -32,8 +32,9 @@ namespace SWC.Tools.Common.Networking
 
         public int TimestampAdj { get; set; }
 
-        public MessageManager(string playerId, string playerSecret)
+        public MessageManager(string url, string playerId, string playerSecret)
         {
+            _url = url;
             _playerId = playerId;
             _playerSecret = playerSecret;
             _messageSender = new MessageSender(_url);

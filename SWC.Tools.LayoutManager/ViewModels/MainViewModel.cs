@@ -1,8 +1,11 @@
 using System;
+using System.Configuration;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using SWC.Tools.Common.AuthData;
 using SWC.Tools.Common.Enums;
@@ -15,14 +18,25 @@ namespace SWC.Tools.LayoutManager.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
+        private const string WINDOWS_URL_KEY = "windowsServerUrl";
+        private const string ANDROID_URL_KEY = "androidServerUrl";
+        private const string SELECTED_SERVER_KEY = "selectedServer";
+        private const string LAST_PLAYER_ID_KEY = "lastPlayerId";
+        private const string LAST_PLAYER_SECRET_KEY = "lastPlayerSecret";
+
         private readonly ActionCommand _saveLayoutCommand;
         private readonly ActionCommand _loadLayoutCommand;
         private readonly ActionCommand _browseCommand;
+        private readonly ActionCommand _serverSelectCommand;
+        private readonly ActionCommand _loginCommand;
         private string _playerprefsPath;
         private string _playerName;
         private MessageManager _messageManager;
         private Player _player;
         private bool _canAdjustTimestamp;
+        private Server _selectedServer;
+        private string _playerId;
+        private string _playerSecret;
 
         public string PlayerprefsPath
         {
@@ -44,20 +58,14 @@ namespace SWC.Tools.LayoutManager.ViewModels
             }
         }
 
-        public ICommand SaveLayoutCommand
-        {
-            get { return _saveLayoutCommand; }
-        }
+        public ICommand SaveLayoutCommand => _saveLayoutCommand;
 
-        public ICommand LoadLayoutCommand
-        {
-            get { return _loadLayoutCommand; }
-        }
+        public ICommand LoadLayoutCommand => _loadLayoutCommand;
 
-        public ICommand BrowseCommand
-        {
-            get { return _browseCommand; }
-        }
+        public ICommand BrowseCommand => _browseCommand;
+
+        public ICommand ServerSelectCommand => _serverSelectCommand;
+        public ICommand LoginCommand => _loginCommand;
 
         public Player Player
         {
@@ -99,14 +107,73 @@ namespace SWC.Tools.LayoutManager.ViewModels
             }
         }
 
+        public bool IsWindowsServer => SelectedServer == Server.Windows;
+        public bool IsAndroidServer => SelectedServer == Server.Android;
+
+        public Server SelectedServer
+        {
+            get { return _selectedServer; }
+            set
+            {
+                _selectedServer = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsWindowsServer));
+                OnPropertyChanged(nameof(IsAndroidServer));
+            }
+        }
+
+        public string PlayerId
+        {
+            get { return _playerId; }
+            set
+            {
+                _playerId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PlayerSecret
+        {
+            get { return _playerSecret; }
+            set
+            {
+                _playerSecret = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event EventHandler LoginSuccessful;
+
         public MainViewModel()
         {
             _saveLayoutCommand = new ActionCommand(SaveCommandHandler);
             _loadLayoutCommand = new ActionCommand(LoadCommandHandler);
-            _browseCommand = new ActionCommand(Browse, true);
+            _serverSelectCommand = new ActionCommand(SelectServer, true);
+            _browseCommand = new ActionCommand(LoginByFile, true);
+            _loginCommand = new ActionCommand(LoginByPlayerId, true);
+
+            ReadConfig();
         }
 
-        private void Browse(object arg)
+        private void ReadConfig()
+        {
+            Server server;
+            Enum.TryParse(ConfigurationManager.AppSettings[SELECTED_SERVER_KEY], out server);
+            SelectedServer = server;
+
+            PlayerId = ConfigurationManager.AppSettings[LAST_PLAYER_ID_KEY];
+            PlayerSecret = ConfigurationManager.AppSettings[LAST_PLAYER_SECRET_KEY];
+        }
+
+        private void SaveToConfig(string key, string value)
+        {
+            var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            c.AppSettings.Settings.Remove(key);
+            c.AppSettings.Settings.Add(key, value);
+            c.Save();
+        }
+
+        private void LoginByFile(object arg)
         {
             try
             {
@@ -126,9 +193,7 @@ namespace SWC.Tools.LayoutManager.ViewModels
                 }
                 PlayerprefsPath = dialog.FileName;
                 var authData = AuthDataProvider.Get(dialog.FileName);
-                _messageManager = new MessageManager(authData.PlayerId, authData.PlayerSecret);
-
-                ThreadPool.QueueUserWorkItem(Login);
+                ThreadPool.QueueUserWorkItem(Login, authData);
             }
             catch (Exception ex)
             {
@@ -136,17 +201,33 @@ namespace SWC.Tools.LayoutManager.ViewModels
             }
         }
 
-        private void Login(object arg = null)
+        private void SelectServer(object arg)
+        {
+            SelectedServer = (Server) arg;
+            SaveToConfig(SELECTED_SERVER_KEY, SelectedServer.ToString());
+        }
+
+        private void LoginByPlayerId(object arg)
+        {
+            var authData = new AuthData(PlayerId, PlayerSecret);
+            SaveToConfig(LAST_PLAYER_ID_KEY, PlayerId);
+            SaveToConfig(LAST_PLAYER_SECRET_KEY, PlayerSecret);
+            ThreadPool.QueueUserWorkItem(Login, authData);
+        }
+
+        private void Login(object arg)
         {
             try
             {
-                DisableCommands();
+                var authData = (AuthData) arg;
+                _messageManager = new MessageManager(GetServerUrl(), authData.PlayerId, authData.PlayerSecret);
                 _messageManager.Refresh();
                 Player = _messageManager.GetLoginData();
 
                 if (Player != null)
                 {
                     EnableCommands();
+                    OnLoginSuccessful();
                 }
             }
             catch (Exception ex)
@@ -266,6 +347,18 @@ namespace SWC.Tools.LayoutManager.ViewModels
         private void EnableCommands()
         {
             Application.Current.Dispatcher.Invoke(() => CanAdjustTimestamp = _saveLayoutCommand.Enabled = _loadLayoutCommand.Enabled = true);
+        }
+
+        private string GetServerUrl()
+        {
+            var key = SelectedServer == Server.Windows ? WINDOWS_URL_KEY : ANDROID_URL_KEY;
+            return ConfigurationManager.AppSettings[key];
+        }
+
+        private void OnLoginSuccessful()
+        {
+            var e = LoginSuccessful;
+            Application.Current.Dispatcher.Invoke(() => e?.Invoke(this, new EventArgs()));
         }
     }
 }
