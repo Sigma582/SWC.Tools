@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:SWC.Tools.LayoutManager.ViewModels"
         xmlns:enums="clr-namespace:SWC.Tools.Common.Enums;assembly=SWC.Tools.Common"
         mc:Ignorable="d"
-        Title="Star Wars Commander layout management tool v.0.5" Height="350" Width="800" d:DataContext="{d:DesignInstance viewModels:MainViewModel}">
+        Title="Star Wars Commander layout management tool v.0.6" Height="350" Width="800" d:DataContext="{d:DesignInstance viewModels:MainViewModel}">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Width" Value="90"/>
