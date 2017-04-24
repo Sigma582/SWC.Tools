@@ -326,6 +326,10 @@ namespace SWC.Tools.LayoutManager.ViewModels
                 else
                 {
                     _messageManager.UpldateLayout(layout.ToDictionary(b => b.Key, b => new Position(b.X, b.Z)));
+                    foreach (var b1 in layout.Where(b => b.Type == Building.BARRACKS || b.Type == Building.FACTORY).OrderByDescending(b => b.Z).ThenBy(b => b.X))
+                    {
+                        _messageManager.UpldateLayout(new [] { b1 }.ToDictionary(b => b.Key, b => new Position(b.X, b.Z)));
+                    }
                 }
                 MessageBox.Show("Layout loaded");
             }
