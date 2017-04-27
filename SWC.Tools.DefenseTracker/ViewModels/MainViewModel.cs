@@ -37,7 +37,7 @@ namespace SWC.Tools.DefenseTracker.ViewModels
         private string _targetPlayerId;
         private Timer _timer;
         private List<Battle> _battleLogs;
-        private int _scUnitsCount;
+        private int? _scUnitsCount;
         private int _scUnitsNotificationCount;
         private bool _notifyAlways;
         private bool _notifyOnSc;
@@ -66,7 +66,7 @@ namespace SWC.Tools.DefenseTracker.ViewModels
             }
         }
 
-        public int ScUnitsCount
+        public int? ScUnitsCount
         {
             get { return _scUnitsCount; }
             private set
@@ -136,7 +136,7 @@ namespace SWC.Tools.DefenseTracker.ViewModels
                 var listenerPlayerSecret = ConfigurationManager.AppSettings[LISTENER_PLAYER_SECRET];
                 _messageManager = new MessageManager(GetServerUrl(), listenerPlayerId, listenerPlayerSecret);
                 _messageManager.Init();
-                if (listenerPlayerId == null)
+                if (string.IsNullOrEmpty(listenerPlayerId))
                 {
                     SaveToConfig(LISTENER_PLAYER_ID, _messageManager.PlayerId);
                     SaveToConfig(LISTENER_PLAYER_SECRET, _messageManager.PlayerSecret);
@@ -168,38 +168,50 @@ namespace SWC.Tools.DefenseTracker.ViewModels
 
         private void Refresh(object state)
         {
-            var scNotification = false;
-            var protectionNotification = false;
-
-            var playerId = (string) state;
-
-            var player = _messageManager.VisitNeighbor(playerId);
-
-            var lastDefenseDateOld = BattleLogs.Where(b => b.Defender.PlayerId == TargetPlayerId).Max(b => b.AttackDate);
-            var lastDefenseDateNew = player.PlayerModel.BattleLogs.Where(b => b.Defender.PlayerId == TargetPlayerId).Max(b => b.AttackDate);
-
-            if (lastDefenseDateOld == lastDefenseDateNew)
+            try
             {
-                return;
+                var scNotification = false;
+                var protectionNotification = false;
+
+                var playerId = (string) state;
+
+                var player = _messageManager.VisitNeighbor(playerId);
+
+                var lastDefenseDateOld = BattleLogs.Where(b => b.Defender.PlayerId == TargetPlayerId)
+                    .Max(b => b.AttackDate);
+                var lastDefenseDateNew = player.PlayerModel.BattleLogs.Where(b => b.Defender.PlayerId == TargetPlayerId)
+                    .Max(b => b.AttackDate);
+
+                var newScUnitsCount = player.PlayerModel.DonatedTroops.SelectMany(kvp => kvp.Value)
+                    .Sum(kvp => kvp.Value);
+
+                if (lastDefenseDateOld == lastDefenseDateNew)
+                {
+                    ScUnitsCount = newScUnitsCount;
+                    return;
+                }
+
+                if (newScUnitsCount < ScUnitsNotificationCount)
+                {
+                    scNotification = true;
+                }
+
+                if (player.PlayerModel.ProtectedUntil != null)
+                {
+                    protectionNotification = true;
+                }
+
+                BattleLogs = player.PlayerModel.BattleLogs.Where(b => b.Defender.PlayerId == TargetPlayerId).ToList();
+                ScUnitsCount = newScUnitsCount;
+
+                if (NotifyAlways || scNotification && NotifyOnSc || protectionNotification && NotifyOnProtection)
+                {
+                    OnBattleOccured(player);
+                }
             }
-
-            var newScUnitsCount = player.PlayerModel.DonatedTroops.SelectMany(kvp => kvp.Value).Sum(kvp => kvp.Value);
-            if (newScUnitsCount < ScUnitsNotificationCount)
+            catch (Exception ex)
             {
-                scNotification = true;
-            }
-
-            if (player.PlayerModel.ProtectedUntil != null)
-            {
-                protectionNotification = true;
-            }
-
-            BattleLogs = player.PlayerModel.BattleLogs.Where(b => b.Defender.PlayerId == TargetPlayerId).ToList();
-            ScUnitsCount = newScUnitsCount;
-
-            if (NotifyAlways || scNotification && NotifyOnSc || protectionNotification && NotifyOnProtection)
-            {
-                OnBattleOccured(player);
+                Log(ex);
             }
         }
 

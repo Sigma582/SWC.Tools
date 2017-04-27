@@ -56,9 +56,6 @@
     <Compile Include="Networking\Json\Entities\GeneratedPlayer.cs" />
     <Compile Include="Networking\Json\Entities\Loot.cs" />
     <Compile Include="Networking\Json\Entities\WarParticipant.cs" />
-    <Compile Include="Networking\Json\Messages\GeneratePlayerMessage.cs" />
-    <Compile Include="Networking\Json\Messages\GetWarParticipantMessage.cs" />
-    <Compile Include="Networking\Json\Messages\UpldateWarLayoutMessage.cs" />
     <Compile Include="ServerConstants.cs" />
     <Compile Include="Layout\LayoutManager.cs" />
     <Compile Include="Networking\Exception\StatusException.cs" />
@@ -106,13 +103,7 @@
     <Compile Include="Networking\Json\Entities\Upgrades.cs" />
     <Compile Include="Networking\Json\Entities\WarHistoryEntry.cs" />
     <Compile Include="Networking\Json\Entities\Xp.cs" />
-    <Compile Include="Networking\Json\Messages\GetAuthTokenMessage.cs" />
-    <Compile Include="Networking\Json\Messages\GetSquadDetailsMessage.cs" />
     <Compile Include="Networking\Json\Messages\Message.cs" />
-    <Compile Include="Networking\Json\Messages\UpldateLayoutMessage.cs" />
-    <Compile Include="Networking\Json\Messages\PlayerLoginMessage.cs" />
-    <Compile Include="Networking\Json\Messages\SearchSquadsMessage.cs" />
-    <Compile Include="Networking\Json\Messages\VisitNeighborMessage.cs" />
     <Compile Include="Networking\Json\Responses\Data.cs" />
     <Compile Include="Networking\Json\Responses\Response.cs" />
     <Compile Include="Networking\MessageManager.cs" />

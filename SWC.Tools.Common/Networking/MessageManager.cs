@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using SWC.Tools.Common.Networking.Exception;
 using SWC.Tools.Common.Networking.Json.CommandArgs;
+using SWC.Tools.Common.Networking.Json.Commands;
 using SWC.Tools.Common.Networking.Json.Entities;
 using SWC.Tools.Common.Networking.Json.Messages;
 using SWC.Tools.Common.Networking.Json.Responses;
@@ -53,7 +54,7 @@ namespace SWC.Tools.Common.Networking
 
         public void Init()
         {
-            if (PlayerId == null)
+            if (string.IsNullOrEmpty(PlayerId))
             {
                 var player = GeneratePlayer();
                 PlayerId = player.PlayerId;
@@ -67,7 +68,7 @@ namespace SWC.Tools.Common.Networking
 
         private string GetAuthToken()
         {
-            var message = new GetAuthTokenMessage(PlayerId, PlayerSecret);
+            var message = new Message(new GetAuthTokenCommand(PlayerId, PlayerSecret));
             var rawResponse = _messageSender.Send(message);
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse)))
             {
@@ -78,7 +79,7 @@ namespace SWC.Tools.Common.Networking
 
         private Player Login()
         {
-            var message = new PlayerLoginMessage(PlayerId, _authToken);
+            var message = new Message(new PlayerLoginCommand(PlayerId)) {AuthKey = _authToken};
             var rawResponse = _messageSender.Send(message);
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse)))
             {
@@ -91,11 +92,12 @@ namespace SWC.Tools.Common.Networking
 
         public GeneratedPlayer GeneratePlayer()
         {
-            var message = new GeneratePlayerMessage();
+            var message = new Message(new GeneratePlayerCommand());
             var rawResponse = _messageSender.Send(message);
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse)))
             {
-                var response = (Response<GeneratedPlayer>) _loginResponseSerializer.ReadObject(stream);
+                var serializer = new DataContractJsonSerializer(typeof(Response<GeneratedPlayer>));
+                var response = (Response<GeneratedPlayer>) serializer.ReadObject(stream);
                 var player = response.Data[0].Result;
                 return player;
             }
@@ -188,42 +190,42 @@ namespace SWC.Tools.Common.Networking
 
         public WarParticipant GetWarParticipant()
         {
-            var message = new GetWarParticipantMessage(PlayerId);
+            var message = new Message(true, new GetWarParticipantCommand(PlayerId));
             var result = Send<WarParticipant>(message);
             return result;
         }
 
         public Player VisitNeighbor(string neighborId)
         {
-            var message = new VisitNeighborMessage(PlayerId, neighborId);
+            var message = new Message(new VisitNeighborCommand(PlayerId, neighborId));
             var result = Send<PlayerWrapper>(message);
             return result.Player;
         }
 
         public IList<Squad> SearchSquads(string searchString)
         {
-            var message = new SearchSquadsMessage(PlayerId, searchString);
+            var message = new Message(true, new SearchSquadsCommand(PlayerId, searchString));
             var result = Send<Squad[]>(message);
             return result.ToList();
         }
 
         public SquadDetails GetSquadDetails(string squadId)
         {
-            var message = new GetSquadDetailsMessage(PlayerId, squadId);
+            var message = new Message(true, new GetSquadDetailsCommand(PlayerId, squadId));
             var result = Send<SquadDetails>(message);
             return result;
         }
 
         public Dictionary<string, Building> UpldateLayout(Dictionary<string, Position> positions)
         {
-            var message = new UpldateLayoutMessage(PlayerId, positions);
+            var message = new Message(true, new UpldateLayoutCommand(PlayerId, positions));
             var result = Send<Dictionary<string, Building>>(message);
             return result;
         }
 
         public Dictionary<string, Building> UpdateWarLayout(Dictionary<string, Position> positions)
         {
-            var message = new UpldateWarLayoutMessage(PlayerId, positions);
+            var message = new Message(new UpdateWarLayoutCommand(PlayerId, positions));
             var result = Send<Dictionary<string, Building>>(message);
             return result;
         }

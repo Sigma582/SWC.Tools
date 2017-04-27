@@ -52,6 +52,7 @@ namespace SWC.Tools.DefenseTracker.Views
                     Background = new LinearGradientBrush(Color.FromRgb(193, 237, 230), Color.FromRgb(128, 148, 255), 90),
                     BorderBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0)),
                     FontColor = new SolidColorBrush(Color.FromArgb(255, 32, 32, 32)),
+
                 };
                 toast.MouseDoubleClick += delegate
                 {
