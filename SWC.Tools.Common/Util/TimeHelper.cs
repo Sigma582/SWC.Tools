@@ -18,5 +18,10 @@ namespace SWC.Tools.Common.Util
             var timestamp = (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds / 1000;
             return Math.Round(timestamp);
         }
+
+        public static DateTime FromSeconds(double seconds)
+        {
+            return DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc).AddSeconds(seconds);
+        }
     }
 }

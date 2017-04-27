@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B948115A-DD68-47F1-82AF-4F6402F07ECF}</ProjectGuid>
+    <ProjectGuid>{34A0565D-9DD1-4143-91AE-948C7FE8C250}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SWC.Tools.LayoutManager</RootNamespace>
-    <AssemblyName>SWC.Tools.LayoutManager</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>SWC.Tools.DefenseTracker</RootNamespace>
+    <AssemblyName>SWC.Tools.DefenseTracker</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -34,9 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mantin.Controls.Wpf.Notification, Version=3.2.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\3rd_party\Mantin.Controls.Wpf.Notification.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -57,6 +63,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\GametagConverter.cs" />
+    <Compile Include="Converters\StarsToResultConverter.cs" />
+    <Compile Include="Converters\SwcDateConverter.cs" />
+    <Compile Include="ViewModels\BattleEventArgs.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -101,7 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWC.Tools.Common.MVVM\SWC.Tools.Common.MVVM.csproj">
-      <Project>{8D482922-37F5-46DB-BA96-92F1EC0E7A4C}</Project>
+      <Project>{8d482922-37f5-46db-ba96-92f1ec0e7a4c}</Project>
       <Name>SWC.Tools.Common.MVVM</Name>
     </ProjectReference>
     <ProjectReference Include="..\SWC.Tools.Common\SWC.Tools.Common.csproj">

@@ -11,6 +11,9 @@ namespace SWC.Tools.Common.Networking.Json.Entities
 
         private string _uid;
 
+        public const string FACTORY = "Factory";
+        public const string BARRACKS = "Barracks";
+
         /// <summary>
         /// Building unique ID, e.g. "bld_62"
         /// </summary>
