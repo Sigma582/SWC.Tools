@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace SWC.Tools.Common.Networking.Json.Entities
@@ -27,8 +28,3 @@ namespace SWC.Tools.Common.Networking.Json.Entities
         public string Name { get; set; }
     }
 }
-
-/*
- 
- 
- */

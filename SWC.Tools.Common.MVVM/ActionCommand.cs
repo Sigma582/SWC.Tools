@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace SWC.Tools.LayoutManager.ViewModels
+namespace SWC.Tools.Common.MVVM
 {
-    internal class ActionCommand : ICommand
+    public class ActionCommand : ICommand
     {
         private readonly Action<object> _action;
         private bool _canExecute;

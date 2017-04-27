@@ -17,8 +17,6 @@ namespace SWC.Tools.Common.Networking
     public class MessageManager
     {
         private readonly string _url;
-        private readonly string _playerId;
-        private readonly string _playerSecret;
         private string _authToken;
         private readonly MessageSender _messageSender;
         private readonly DataContractJsonSerializer _authResponseSerializer;
@@ -32,11 +30,22 @@ namespace SWC.Tools.Common.Networking
 
         public int TimestampAdj { get; set; }
 
-        public MessageManager(string url, string playerId, string playerSecret)
+        public string PlayerId { get; private set; }
+
+        public string PlayerSecret { get; private set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="playerId"></param>
+        /// <param name="playerSecret"></param>
+        /// <remarks>If playerId and playerSecret are null, a new player will be generated and used. Suitable for data collecting scenarios.</remarks>
+        public MessageManager(string url, string playerId = null, string playerSecret = null)
         {
+            PlayerId = playerId;
+            PlayerSecret = playerSecret;
             _url = url;
-            _playerId = playerId;
-            _playerSecret = playerSecret;
             _messageSender = new MessageSender(_url);
             _authResponseSerializer = new DataContractJsonSerializer(typeof(Response<string>));
             _loginResponseSerializer = new DataContractJsonSerializer(typeof(Response<Player>), new DataContractJsonSerializerSettings{UseSimpleDictionaryFormat = true});
@@ -44,6 +53,13 @@ namespace SWC.Tools.Common.Networking
 
         public void Init()
         {
+            if (PlayerId == null)
+            {
+                var player = GeneratePlayer();
+                PlayerId = player.PlayerId;
+                PlayerSecret = player.Secret;
+            }
+
             _authToken = GetAuthToken();
             _loginData = Login();
             _isLive = true;
@@ -51,7 +67,7 @@ namespace SWC.Tools.Common.Networking
 
         private string GetAuthToken()
         {
-            var message = new GetAuthTokenMessage(_playerId, _playerSecret);
+            var message = new GetAuthTokenMessage(PlayerId, PlayerSecret);
             var rawResponse = _messageSender.Send(message);
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse)))
             {
@@ -62,13 +78,25 @@ namespace SWC.Tools.Common.Networking
 
         private Player Login()
         {
-            var message = new PlayerLoginMessage(_playerId, _authToken);
+            var message = new PlayerLoginMessage(PlayerId, _authToken);
             var rawResponse = _messageSender.Send(message);
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse)))
             {
                 var response = (Response<Player>) _loginResponseSerializer.ReadObject(stream);
                 var player = response.Data[0].Result;
                 _lastLoginTimeSec = player.Liveness.LastLoginTime;
+                return player;
+            }
+        }
+
+        public GeneratedPlayer GeneratePlayer()
+        {
+            var message = new GeneratePlayerMessage();
+            var rawResponse = _messageSender.Send(message);
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse)))
+            {
+                var response = (Response<GeneratedPlayer>) _loginResponseSerializer.ReadObject(stream);
+                var player = response.Data[0].Result;
                 return player;
             }
         }
@@ -160,44 +188,45 @@ namespace SWC.Tools.Common.Networking
 
         public WarParticipant GetWarParticipant()
         {
-            var message = new GetWarParticipantMessage(_playerId);
+            var message = new GetWarParticipantMessage(PlayerId);
             var result = Send<WarParticipant>(message);
             return result;
         }
 
         public Player VisitNeighbor(string neighborId)
         {
-            var message = new VisitNeighborMessage(_playerId, neighborId);
+            var message = new VisitNeighborMessage(PlayerId, neighborId);
             var result = Send<PlayerWrapper>(message);
             return result.Player;
         }
 
         public IList<Squad> SearchSquads(string searchString)
         {
-            var message = new SearchSquadsMessage(_playerId, searchString);
+            var message = new SearchSquadsMessage(PlayerId, searchString);
             var result = Send<Squad[]>(message);
             return result.ToList();
         }
 
         public SquadDetails GetSquadDetails(string squadId)
         {
-            var message = new GetSquadDetailsMessage(_playerId, squadId);
+            var message = new GetSquadDetailsMessage(PlayerId, squadId);
             var result = Send<SquadDetails>(message);
             return result;
         }
 
         public Dictionary<string, Building> UpldateLayout(Dictionary<string, Position> positions)
         {
-            var message = new UpldateLayoutMessage(_playerId, positions);
+            var message = new UpldateLayoutMessage(PlayerId, positions);
             var result = Send<Dictionary<string, Building>>(message);
             return result;
         }
 
         public Dictionary<string, Building> UpdateWarLayout(Dictionary<string, Position> positions)
         {
-            var message = new UpldateWarLayoutMessage(_playerId, positions);
+            var message = new UpldateWarLayoutMessage(PlayerId, positions);
             var result = Send<Dictionary<string, Building>>(message);
             return result;
         }
+
     }
 }

@@ -50,5 +50,8 @@ namespace SWC.Tools.Common.Networking.Json.Entities
 
         [DataMember(Name="shards")]
         public Dictionary<string, int> Shards { get; set; }
+
+        [DataMember(Name="battleLogs")]
+        public List<Battle> BattleLogs { get; set; }
     }
 }

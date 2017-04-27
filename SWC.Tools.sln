@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWC.Tools.Common", "SWC.Too
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWC.Tools.TestConsole", "SWC.Tools.TestConsole\SWC.Tools.TestConsole.csproj", "{B830A4F6-D2FE-452A-ABF2-DD6CFD545A4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWC.Tools.DefenseTracker", "SWC.Tools.DefenseTracker\SWC.Tools.DefenseTracker.csproj", "{34A0565D-9DD1-4143-91AE-948C7FE8C250}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWC.Tools.Common.MVVM", "SWC.Tools.Common.MVVM\SWC.Tools.Common.MVVM.csproj", "{8D482922-37F5-46DB-BA96-92F1EC0E7A4C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWC.Tools.LayoutManager", "SWC.Tools.LayoutManager\SWC.Tools.LayoutManager.csproj", "{B948115A-DD68-47F1-82AF-4F6402F07ECF}"
 EndProject
 Global
@@ -21,6 +25,14 @@ Global
 		{B830A4F6-D2FE-452A-ABF2-DD6CFD545A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B830A4F6-D2FE-452A-ABF2-DD6CFD545A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B830A4F6-D2FE-452A-ABF2-DD6CFD545A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34A0565D-9DD1-4143-91AE-948C7FE8C250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A0565D-9DD1-4143-91AE-948C7FE8C250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A0565D-9DD1-4143-91AE-948C7FE8C250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A0565D-9DD1-4143-91AE-948C7FE8C250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D482922-37F5-46DB-BA96-92F1EC0E7A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D482922-37F5-46DB-BA96-92F1EC0E7A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D482922-37F5-46DB-BA96-92F1EC0E7A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D482922-37F5-46DB-BA96-92F1EC0E7A4C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B948115A-DD68-47F1-82AF-4F6402F07ECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B948115A-DD68-47F1-82AF-4F6402F07ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B948115A-DD68-47F1-82AF-4F6402F07ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU

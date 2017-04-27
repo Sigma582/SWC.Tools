@@ -1,15 +1,14 @@
 using System;
 using System.Configuration;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Microsoft.Win32;
 using SWC.Tools.Common.AuthData;
 using SWC.Tools.Common.Enums;
 using SWC.Tools.Common.Layout;
+using SWC.Tools.Common.MVVM;
 using SWC.Tools.Common.Networking;
 using SWC.Tools.Common.Networking.Json.CommandArgs;
 using SWC.Tools.Common.Networking.Json.Entities;
@@ -18,23 +17,18 @@ namespace SWC.Tools.LayoutManager.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        private const string WINDOWS_URL_KEY = "windowsServerUrl";
-        private const string ANDROID_URL_KEY = "androidServerUrl";
-        private const string SELECTED_SERVER_KEY = "selectedServer";
         private const string LAST_PLAYER_ID_KEY = "lastPlayerId";
         private const string LAST_PLAYER_SECRET_KEY = "lastPlayerSecret";
 
         private readonly ActionCommand _saveLayoutCommand;
         private readonly ActionCommand _loadLayoutCommand;
         private readonly ActionCommand _browseCommand;
-        private readonly ActionCommand _serverSelectCommand;
         private readonly ActionCommand _loginCommand;
         private string _playerprefsPath;
         private string _playerName;
         private MessageManager _messageManager;
         private Player _player;
         private bool _canAdjustTimestamp;
-        private Server _selectedServer;
         private string _playerId;
         private string _playerSecret;
 
@@ -64,7 +58,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
 
         public ICommand BrowseCommand => _browseCommand;
 
-        public ICommand ServerSelectCommand => _serverSelectCommand;
         public ICommand LoginCommand => _loginCommand;
 
         public Player Player
@@ -104,21 +97,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
             {
                 _canAdjustTimestamp = value;
                 OnPropertyChanged();
-            }
-        }
-
-        public bool IsWindowsServer => SelectedServer == Server.Windows;
-        public bool IsAndroidServer => SelectedServer == Server.Android;
-
-        public Server SelectedServer
-        {
-            get { return _selectedServer; }
-            set
-            {
-                _selectedServer = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsWindowsServer));
-                OnPropertyChanged(nameof(IsAndroidServer));
             }
         }
 
@@ -165,14 +143,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
             PlayerSecret = ConfigurationManager.AppSettings[LAST_PLAYER_SECRET_KEY];
         }
 
-        private void SaveToConfig(string key, string value)
-        {
-            var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            c.AppSettings.Settings.Remove(key);
-            c.AppSettings.Settings.Add(key, value);
-            c.Save();
-        }
-
         private void LoginByFile(object arg)
         {
             try
@@ -199,12 +169,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
             {
                 OnError(ex);
             }
-        }
-
-        private void SelectServer(object arg)
-        {
-            SelectedServer = (Server) arg;
-            SaveToConfig(SELECTED_SERVER_KEY, SelectedServer.ToString());
         }
 
         private void LoginByPlayerId(object arg)
@@ -351,12 +315,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
         private void EnableCommands()
         {
             Application.Current.Dispatcher.Invoke(() => CanAdjustTimestamp = _saveLayoutCommand.Enabled = _loadLayoutCommand.Enabled = true);
-        }
-
-        private string GetServerUrl()
-        {
-            var key = SelectedServer == Server.Windows ? WINDOWS_URL_KEY : ANDROID_URL_KEY;
-            return ConfigurationManager.AppSettings[key];
         }
 
         private void OnLoginSuccessful()
