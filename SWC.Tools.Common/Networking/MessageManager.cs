@@ -138,9 +138,11 @@ namespace SWC.Tools.Common.Networking
                 case ServerConstants.LOGIN_TIME_MISMATCH:
                 case ServerConstants.COMMAND_TIMESTAMP_ERROR:
                 case ServerConstants.COMMAND_TIMESTAMP_ERROR2:
+                case ServerConstants.UNKNOWN_AUTHENTICATION_PROBLEM:
                     if (retryCount > 0)
                     {
                         Init();
+                        PrepareMessage(message);
                         // ReSharper disable once TailRecursiveCall
                         return Send<TResult>(message, retryCount - 1);
                     }

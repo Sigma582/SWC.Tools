@@ -42,6 +42,7 @@ namespace SWC.Tools.DefenseTracker.ViewModels
         private bool _notifyAlways;
         private bool _notifyOnSc;
         private bool _notifyOnProtection;
+        private int? _protectedUntil;
 
         public ActionCommand StartCommand { get; }
         public ActionCommand StopCommand { get; }
@@ -72,6 +73,16 @@ namespace SWC.Tools.DefenseTracker.ViewModels
             private set
             {
                 _scUnitsCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int? ProtectedUntil
+        {
+            get { return _protectedUntil; }
+            set
+            {
+                _protectedUntil = value;
                 OnPropertyChanged();
             }
         }
@@ -185,10 +196,9 @@ namespace SWC.Tools.DefenseTracker.ViewModels
                 var newScUnitsCount = player.PlayerModel.DonatedTroops.SelectMany(kvp => kvp.Value)
                     .Sum(kvp => kvp.Value);
 
-                if (lastDefenseDateOld == lastDefenseDateNew)
+                if (lastDefenseDateOld < lastDefenseDateNew)
                 {
-                    ScUnitsCount = newScUnitsCount;
-                    return;
+                    newBattle = true;
                 }
 
                 if (newScUnitsCount < ScUnitsNotificationCount)
@@ -203,15 +213,21 @@ namespace SWC.Tools.DefenseTracker.ViewModels
 
                 BattleLogs = player.PlayerModel.BattleLogs.Where(b => b.Defender.PlayerId == TargetPlayerId).ToList();
                 ScUnitsCount = newScUnitsCount;
+                ProtectedUntil = player.PlayerModel.ProtectedUntil;
 
-                if (NotifyAlways || scNotification && NotifyOnSc || protectionNotification && NotifyOnProtection)
+                if (newBattle && (NotifyAlways || scNotification && NotifyOnSc || protectionNotification && NotifyOnProtection))
                 {
+                    Debug("Battle occurred");
                     OnBattleOccured(player);
                 }
             }
             catch (Exception ex)
             {
                 Log(ex);
+            }
+            finally
+            {
+                _timer = new Timer(Refresh, TargetPlayerId, TIMER_PERIOD, 0);
             }
         }
 

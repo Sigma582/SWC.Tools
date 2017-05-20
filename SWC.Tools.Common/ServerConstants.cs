@@ -56,6 +56,7 @@
         //discovered - may be inaccurate
         public const int ZERO = 0;
         public const int SUCCESS = 5001;
+        public const int UNKNOWN_AUTHENTICATION_PROBLEM = 802;
         /// <summary>
         /// Timestamp specified is too small
         /// </summary>

@@ -34,9 +34,9 @@ namespace SWC.Tools.Common.MVVM
 
         public ICommand ServerSelectCommand => _serverSelectCommand;
 
-        private void Log(string error)
+        protected void Debug(string message)
         {
-            File.AppendAllLines("error.log", new[] {error});
+            File.AppendAllLines("debug.log", new[] {string.Format("{0:yyyy-MM-dd HH:mm:ss} | DEBUG: {1}", DateTime.Now, message)});
         }
 
         protected void OnError(Exception error)
