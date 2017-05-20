@@ -183,6 +183,7 @@ namespace SWC.Tools.DefenseTracker.ViewModels
             {
                 var scNotification = false;
                 var protectionNotification = false;
+                var newBattle = false;
 
                 var playerId = (string) state;
 
