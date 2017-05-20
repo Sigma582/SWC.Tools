@@ -11,9 +11,6 @@ namespace SWC.Tools.Common.Networking.Json.CommandArgs
             NeighborId = neighborId;
         }
 
-        [DataMember(Name = "playerId")]
-        public string PlayerId { get; set; }
-
         [DataMember(Name = "neighborId")]
         public string NeighborId { get; set; }
     }

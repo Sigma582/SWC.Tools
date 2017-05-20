@@ -141,6 +141,15 @@ namespace SWC.Tools.Common.Networking
                 case ServerConstants.UNKNOWN_AUTHENTICATION_PROBLEM:
                     if (retryCount > 0)
                     {
+                        if (response.Data[0].Status == ServerConstants.COMMAND_TIMESTAMP_ERROR)
+                        {
+                            TimestampAdj++;
+                        }
+                        if (response.Data[0].Status == ServerConstants.COMMAND_TIMESTAMP_ERROR2)
+                        {
+                            TimestampAdj--;
+                        }
+                        
                         Init();
                         PrepareMessage(message);
                         // ReSharper disable once TailRecursiveCall

@@ -8,7 +8,7 @@ namespace SWC.Tools.Common.Networking.Json.Commands
     {
         public GetWarParticipantCommand(string playerId)
         {
-            Args = new GetWarParticipantCommandArguments(playerId);
+            Args = new CommandArguments(playerId);
         }
 
         protected override string GetAction()

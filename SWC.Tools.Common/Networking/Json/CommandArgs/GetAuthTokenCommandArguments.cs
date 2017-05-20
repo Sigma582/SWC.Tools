@@ -36,10 +36,7 @@ namespace SWC.Tools.Common.Networking.Json.CommandArgs
 
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(token));
         }
-
-        [DataMember(Name = "playerId")]
-        public string PlayerId { get; set; }
-
+        
         [DataMember(Name = "requestToken")]
         public string RequestToken { get; set; }
 

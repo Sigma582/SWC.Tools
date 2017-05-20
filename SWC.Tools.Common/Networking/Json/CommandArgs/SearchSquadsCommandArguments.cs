@@ -11,9 +11,6 @@ namespace SWC.Tools.Common.Networking.Json.CommandArgs
             SearchString = searchString;
         }
 
-        [DataMember(Name = "playerId")]
-        public string PlayerId { get; set; }
-
         [DataMember(Name = "searchTerm")]
         public string SearchString { get; set; }
     }

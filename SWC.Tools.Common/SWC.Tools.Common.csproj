@@ -46,7 +46,6 @@
     <Compile Include="Enums\BaseType.cs" />
     <Compile Include="Enums\Server.cs" />
     <Compile Include="Networking\Json\CommandArgs\GeneratePlayerCommandArguments.cs" />
-    <Compile Include="Networking\Json\CommandArgs\GetWarParticipantCommandArguments.cs" />
     <Compile Include="Networking\Json\CommandArgs\Position.cs" />
     <Compile Include="Networking\Json\Commands\GeneratePlayerCommand.cs" />
     <Compile Include="Networking\Json\Commands\GetWarParticipantCommand.cs" />
