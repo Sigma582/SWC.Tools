@@ -9,19 +9,22 @@ namespace SWC.Tools.Common.AuthData
     {
         public static AuthData Get(string fileName)
         {
-            var bytes = File.ReadAllBytes(fileName);
-            var str = Encoding.UTF8.GetString(bytes);
-            var startByte = str.IndexOf("prefPlayerId", StringComparison.InvariantCulture) + 16;
+			String idKey = "prefPlayerId$";
+			String pwKey = "prefPlayerSecret ";
 
-            if (bytes[startByte] == 0)
-            {
-                startByte++;
-            }
+			var bytes = File.ReadAllBytes(fileName);
+			var str = Encoding.ASCII.GetString(bytes);
 
-            var playerIdBytes = bytes.Skip(startByte).Take(36).ToArray();
-            var playerSecretBytes = bytes.Skip(startByte + 61).Take(32).ToArray();
+			var startByte = str.IndexOf(idKey, StringComparison.InvariantCulture) + idKey.Length + 3;
 
-            return new AuthData(Encoding.UTF8.GetString(playerIdBytes), Encoding.UTF8.GetString(playerSecretBytes));
+			var playerIdBytes = bytes.Skip(startByte).Take(36).ToArray();
+
+			startByte = str.IndexOf(pwKey, StringComparison.InvariantCulture) + pwKey.Length + 3;
+
+			var playerSecretBytes = bytes.Skip(startByte).Take(32).ToArray();
+
+			return new AuthData(Encoding.ASCII.GetString(playerIdBytes), Encoding.ASCII.GetString(playerSecretBytes));
+
         }
     }
 
