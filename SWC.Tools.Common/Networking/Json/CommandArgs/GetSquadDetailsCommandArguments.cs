@@ -11,9 +11,6 @@ namespace SWC.Tools.Common.Networking.Json.CommandArgs
             SquadId = squadId;
         }
 
-        [DataMember(Name = "playerId")]
-        public string PlayerId { get; set; }
-
         [DataMember(Name = "guildId")]
         public string SquadId { get; set; }
     }

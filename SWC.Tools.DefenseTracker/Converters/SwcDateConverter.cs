@@ -9,6 +9,11 @@ namespace SWC.Tools.DefenseTracker.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             var utcSeconds = (int) value;
             return $"{TimeHelper.FromSeconds(utcSeconds).ToLocalTime() : dd MMM @ HH:mm}";
         }

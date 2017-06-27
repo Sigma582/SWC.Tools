@@ -23,9 +23,6 @@ namespace SWC.Tools.Common.Networking.Json.CommandArgs
             DeviceIdType = "uid";
         }
 
-        [DataMember(Name = "playerId")]
-        public string PlayerId { get; set; }
-
         [DataMember(Name = "locale")]
         public string Locale { get; set; }
 
