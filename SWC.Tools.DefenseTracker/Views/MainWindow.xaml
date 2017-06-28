@@ -7,6 +7,7 @@
         xmlns:enums="clr-namespace:SWC.Tools.Common.Enums;assembly=SWC.Tools.Common"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:converters="clr-namespace:SWC.Tools.DefenseTracker.Converters"
+        xmlns:converters1="clr-namespace:SWC.Tools.Common.MVVM.Converters;assembly=SWC.Tools.Common.MVVM"
         mc:Ignorable="d"
         Title="SWC Defence tracker" d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
         SizeToContent="WidthAndHeight"
@@ -31,7 +32,7 @@
 
         <converters:SwcDateConverter x:Key="SwcDateConverter"/>
         <converters:StarsToResultConverter x:Key="StarsToResultConverter"/>
-        <converters:GametagConverter x:Key="GametagConverter"/>
+        <converters1:GametagConverter x:Key="GametagConverter"/>
 
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
     </Window.Resources>

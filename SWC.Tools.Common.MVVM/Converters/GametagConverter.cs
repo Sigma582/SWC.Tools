@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows.Data;
 
-namespace SWC.Tools.DefenseTracker.Converters
+namespace SWC.Tools.Common.MVVM.Converters
 {
-    internal class GametagConverter : IValueConverter
+    public class GametagConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

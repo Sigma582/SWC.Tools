@@ -22,7 +22,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
 
         private readonly ActionCommand _saveLayoutCommand;
         private readonly ActionCommand _loadLayoutCommand;
-        private readonly ActionCommand _browseCommand;
         private readonly ActionCommand _loginCommand;
         private string _playerprefsPath;
         private string _playerName;
@@ -60,11 +59,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
         public ICommand LoadLayoutCommand
         {
             get { return _loadLayoutCommand; }
-        }
-
-        public ICommand BrowseCommand
-        {
-            get { return _browseCommand; }
         }
 
         public ICommand LoginCommand
@@ -138,7 +132,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
         {
             _saveLayoutCommand = new ActionCommand(SaveCommandHandler);
             _loadLayoutCommand = new ActionCommand(LoadCommandHandler);
-            _browseCommand = new ActionCommand(LoginByFile, true);
             _loginCommand = new ActionCommand(LoginByPlayerId, true);
 
             ReadConfig();
@@ -148,34 +141,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
         {
             PlayerId = ConfigurationManager.AppSettings[LAST_PLAYER_ID_KEY];
             PlayerSecret = ConfigurationManager.AppSettings[LAST_PLAYER_SECRET_KEY];
-        }
-
-        private void LoginByFile(object arg)
-        {
-            try
-            {
-                var dialog = new OpenFileDialog
-                {
-                    CheckFileExists = true,
-                    CheckPathExists = true,
-                    DefaultExt = ".dat",
-                    Filter = "playerprefs files (.dat) | *.dat",
-                    Title = "Select playerprefs.dat file associated with your base",
-                    Multiselect = false
-                };
-                var res = dialog.ShowDialog();
-                if (res != true)
-                {
-                    return;
-                }
-                PlayerprefsPath = dialog.FileName;
-                var authData = AuthDataProvider.Get(dialog.FileName);
-                ThreadPool.QueueUserWorkItem(Login, authData);
-            }
-            catch (Exception ex)
-            {
-                OnError(ex);
-            }
         }
 
         private void LoginByPlayerId(object arg)
@@ -190,6 +155,7 @@ namespace SWC.Tools.LayoutManager.ViewModels
         {
             try
             {
+                _loginCommand.Enabled = false;
                 var authData = (AuthData) arg;
                 _messageManager = new MessageManager(GetServerUrl(), authData.PlayerId, authData.PlayerSecret);
                 _messageManager.Refresh();
