@@ -52,13 +52,25 @@ namespace SWC.Tools.LayoutManager.ViewModels
             }
         }
 
-        public ICommand SaveLayoutCommand => _saveLayoutCommand;
+        public ICommand SaveLayoutCommand
+        {
+            get { return _saveLayoutCommand; }
+        }
 
-        public ICommand LoadLayoutCommand => _loadLayoutCommand;
+        public ICommand LoadLayoutCommand
+        {
+            get { return _loadLayoutCommand; }
+        }
 
-        public ICommand BrowseCommand => _browseCommand;
+        public ICommand BrowseCommand
+        {
+            get { return _browseCommand; }
+        }
 
-        public ICommand LoginCommand => _loginCommand;
+        public ICommand LoginCommand
+        {
+            get { return _loginCommand; }
+        }
 
         public Player Player
         {
@@ -126,7 +138,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
         {
             _saveLayoutCommand = new ActionCommand(SaveCommandHandler);
             _loadLayoutCommand = new ActionCommand(LoadCommandHandler);
-            _serverSelectCommand = new ActionCommand(SelectServer, true);
             _browseCommand = new ActionCommand(LoginByFile, true);
             _loginCommand = new ActionCommand(LoginByPlayerId, true);
 
@@ -135,10 +146,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
 
         private void ReadConfig()
         {
-            Server server;
-            Enum.TryParse(ConfigurationManager.AppSettings[SELECTED_SERVER_KEY], out server);
-            SelectedServer = server;
-
             PlayerId = ConfigurationManager.AppSettings[LAST_PLAYER_ID_KEY];
             PlayerSecret = ConfigurationManager.AppSettings[LAST_PLAYER_SECRET_KEY];
         }
@@ -320,7 +327,13 @@ namespace SWC.Tools.LayoutManager.ViewModels
         private void OnLoginSuccessful()
         {
             var e = LoginSuccessful;
-            Application.Current.Dispatcher.Invoke(() => e?.Invoke(this, new EventArgs()));
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (e != null)
+                {
+                    e.Invoke(this, new EventArgs());
+                }
+            });
         }
     }
 }

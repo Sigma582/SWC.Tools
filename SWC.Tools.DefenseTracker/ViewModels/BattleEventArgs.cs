@@ -5,8 +5,8 @@ namespace SWC.Tools.DefenseTracker.ViewModels
 {
     public class BattleEventArgs : EventArgs
     {
-        public Battle Battle { get; }
-        public int ScUnitsCountRemaining { get; }
+        public Battle Battle { get; set; }
+        public int ScUnitsCountRemaining { get; set; }
 
         public BattleEventArgs(Battle battle, int scUnitsCountRemaining)
         {

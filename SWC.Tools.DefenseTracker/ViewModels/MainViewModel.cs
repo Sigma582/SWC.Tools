@@ -25,7 +25,6 @@ namespace SWC.Tools.DefenseTracker.ViewModels
         private const string TARGET_PLAYER_ID = "targetPlayerId";
         private const string LISTENER_PLAYER_ID = "listenerPlayerId";
         private const string LISTENER_PLAYER_SECRET = "listenerPlayerSecret";
-        private const string SELECTED_SERVER = "selectedServer";
         private const string NOTIFY_ALWAYS = "notifyAlways";
         private const string NOTIFY_ON_PROTECTION = "notifyOnProtection";
         private const string NOTIFY_ON_SC = "notifyOnSc";
@@ -44,8 +43,8 @@ namespace SWC.Tools.DefenseTracker.ViewModels
         private bool _notifyOnProtection;
         private int? _protectedUntil;
 
-        public ActionCommand StartCommand { get; }
-        public ActionCommand StopCommand { get; }
+        public ActionCommand StartCommand { get; set; }
+        public ActionCommand StopCommand { get; set; }
 
         public string TargetPlayerId
         {
@@ -153,7 +152,6 @@ namespace SWC.Tools.DefenseTracker.ViewModels
                     SaveToConfig(LISTENER_PLAYER_SECRET, _messageManager.PlayerSecret);
                 }
 
-                SaveToConfig(SELECTED_SERVER, SelectedServer.ToString());
                 SaveToConfig(NOTIFY_ALWAYS, NotifyAlways.ToString());
                 SaveToConfig(NOTIFY_ON_PROTECTION, NotifyOnProtection.ToString());
                 SaveToConfig(NOTIFY_ON_SC, NotifyOnSc.ToString());
@@ -173,7 +171,10 @@ namespace SWC.Tools.DefenseTracker.ViewModels
         private void Stop(object o)
         {
             StopCommand.Enabled = false;
-            _timer?.Dispose();
+            if (_timer != null)
+            {
+                _timer.Dispose();
+            }
             StartCommand.Enabled = true;
         }
 
@@ -238,20 +239,17 @@ namespace SWC.Tools.DefenseTracker.ViewModels
             bool notifyOnProtection;
             bool notifyOnSc;
             int scUnitsNotificationCount;
-            Server selectedServer;
 
             bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ALWAYS], out notifyAlways);
             bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ON_PROTECTION], out notifyOnProtection);
             bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ON_SC], out notifyOnSc);
             int.TryParse(ConfigurationManager.AppSettings[SC_UNITS_NOTIFICATION_COUNT], out scUnitsNotificationCount);
-            Enum.TryParse(ConfigurationManager.AppSettings[SELECTED_SERVER], out selectedServer);
             TargetPlayerId = ConfigurationManager.AppSettings[TARGET_PLAYER_ID];
 
             NotifyAlways = notifyAlways;
             NotifyOnProtection = notifyOnProtection;
             NotifyOnSc = notifyOnSc;
             ScUnitsNotificationCount = scUnitsNotificationCount;
-            SelectedServer = selectedServer;
         }
 
         private void OnBattleOccured(Player player)
@@ -259,7 +257,10 @@ namespace SWC.Tools.DefenseTracker.ViewModels
             var lastDefense = player.PlayerModel.BattleLogs.Last(b => b.Defender.PlayerId == player.PlayerId);
             var scUnitsCount = player.PlayerModel.DonatedTroops.SelectMany(kvp => kvp.Value).Sum(kvp => kvp.Value);
 
-            BattleOccured?.Invoke(this, new BattleEventArgs(lastDefense, scUnitsCount));
+            if (BattleOccured != null)
+            {
+                BattleOccured.Invoke(this, new BattleEventArgs(lastDefense, scUnitsCount));
+            }
         }
     }
 }

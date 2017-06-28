@@ -39,10 +39,10 @@ namespace SWC.Tools.DefenseTracker.Views
         private void ViewModelOnBattleOccured(object sender, BattleEventArgs e)
         {
 
-            var notification = $"Result:            {(e.Battle.Stars > 0 ? "DEFEAT" : "VICTORY" )}\n" +
-                               $"Damage %:    {e.Battle.BaseDamagePercent}\n" +
-                               $"Stars scored:  {e.Battle.Stars}\n" +
-                               $"SC units left:  {e.ScUnitsCountRemaining}";
+            var notification = string.Format("Result:            {0}\n", e.Battle.Stars > 0 ? "DEFEAT" : "VICTORY") +
+                               string.Format("Damage %:    {0}\n", e.Battle.BaseDamagePercent) +
+                               string.Format("Stars scored:  {0}\n", e.Battle.Stars) +
+                               string.Format("SC units left:  {0}", e.ScUnitsCountRemaining);
 
             Application.Current.Dispatcher.Invoke(() =>
             {

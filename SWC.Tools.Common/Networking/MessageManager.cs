@@ -236,7 +236,7 @@ namespace SWC.Tools.Common.Networking
 
         public Dictionary<string, Building> UpdateWarLayout(Dictionary<string, Position> positions)
         {
-            var message = new Message(new UpdateWarLayoutCommand(PlayerId, positions));
+            var message = new Message(true, new UpdateWarLayoutCommand(PlayerId, positions));
             var result = Send<Dictionary<string, Building>>(message);
             return result;
         }

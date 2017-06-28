@@ -15,7 +15,7 @@ namespace SWC.Tools.DefenseTracker.Converters
             }
 
             var utcSeconds = (int) value;
-            return $"{TimeHelper.FromSeconds(utcSeconds).ToLocalTime() : dd MMM @ HH:mm}";
+            return string.Format("{0: dd MMM @ HH:mm}", TimeHelper.FromSeconds(utcSeconds).ToLocalTime());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

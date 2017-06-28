@@ -2,7 +2,7 @@
 {
     public class StatusException : System.Exception
     {
-        public int StatusCode { get; }
+        public int StatusCode { get; private set; }
 
         public StatusException(int statusCode)
         : base("The server returned Status code " + statusCode)
