@@ -153,8 +153,8 @@ namespace SWC.Tools.DefenseTracker.ViewModels
                 }
 
                 SaveToConfig(NOTIFY_ALWAYS, NotifyAlways.ToString());
-                SaveToConfig(NOTIFY_ON_PROTECTION, NotifyOnProtection.ToString());
-                SaveToConfig(NOTIFY_ON_SC, NotifyOnSc.ToString());
+                //SaveToConfig(NOTIFY_ON_PROTECTION, NotifyOnProtection.ToString());
+                //SaveToConfig(NOTIFY_ON_SC, NotifyOnSc.ToString());
                 SaveToConfig(SC_UNITS_NOTIFICATION_COUNT, ScUnitsNotificationCount.ToString());
                 SaveToConfig(TARGET_PLAYER_ID, TargetPlayerId);
 
@@ -241,14 +241,14 @@ namespace SWC.Tools.DefenseTracker.ViewModels
             int scUnitsNotificationCount;
 
             bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ALWAYS], out notifyAlways);
-            bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ON_PROTECTION], out notifyOnProtection);
-            bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ON_SC], out notifyOnSc);
+//            bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ON_PROTECTION], out notifyOnProtection);
+//            bool.TryParse(ConfigurationManager.AppSettings[NOTIFY_ON_SC], out notifyOnSc);
             int.TryParse(ConfigurationManager.AppSettings[SC_UNITS_NOTIFICATION_COUNT], out scUnitsNotificationCount);
             TargetPlayerId = ConfigurationManager.AppSettings[TARGET_PLAYER_ID];
 
             NotifyAlways = notifyAlways;
-            NotifyOnProtection = notifyOnProtection;
-            NotifyOnSc = notifyOnSc;
+            //NotifyOnProtection = notifyOnProtection;
+            //NotifyOnSc = notifyOnSc;
             ScUnitsNotificationCount = scUnitsNotificationCount;
         }
 

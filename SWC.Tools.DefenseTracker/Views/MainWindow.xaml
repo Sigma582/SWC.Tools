@@ -53,35 +53,17 @@
 <!--            <RowDefinition Height="Auto"/>-->
 <!--        </Grid.RowDefinitions>-->
 
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal">
-            <TextBlock Text="Server:" VerticalAlignment="Center"/>
-            <RadioButton Content="Windows"
-                         GroupName="Server"
-                         Command="{Binding ServerSelectCommand}"
-                         CommandParameter="{x:Static Windows, MemberType={x:Type enums:Server}}"
-                         IsChecked="{Binding IsWindowsServer, Mode=OneWay}"
-                         VerticalAlignment="Center"
-                         Margin="10 0 0 0"/>
-            <RadioButton Content="Android"
-                         GroupName="Server"
-                         Command="{Binding ServerSelectCommand}"
-                         CommandParameter="{x:Static Android, MemberType={x:Type enums:Server}}"
-                         IsChecked="{Binding IsAndroidServer, Mode=OneWay}"
-                         VerticalAlignment="Center"
-                         Margin="10 0 0 0"/>
-        </StackPanel>
-
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Player ID:" Margin="0 5 0 0"/>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TargetPlayerId, Mode=TwoWay}" Width="250" Margin="10 5 0 0"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Notify:" Margin="0 10 0 0"/>
-        <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="on every battle" IsChecked="{Binding NotifyAlways, Mode=TwoWay}"/>
-        <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Content="if protection is gained" IsChecked="{Binding NotifyOnProtection, Mode=TwoWay}"/>
-        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <CheckBox Content="if there are less than" IsChecked="{Binding NotifyOnSc, Mode=TwoWay}"/>
-            <TextBox Text="{Binding ScUnitsNotificationCount, Mode=TwoWay}" PreviewTextInput="OnPreviewTextInput" Width="20" Margin="5 0" />
-            <TextBlock Text="units in SC"/>
-        </StackPanel>
+<!--        <TextBlock Grid.Row="3" Grid.Column="0" Text="Notify:" Margin="0 10 0 0"/>-->
+        <CheckBox Margin="10 10 0 0" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Show popup when a battle occurs" IsChecked="{Binding NotifyAlways, Mode=TwoWay}"/>
+<!--        <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Content="if protection is gained" IsChecked="{Binding NotifyOnProtection, Mode=TwoWay}"/>-->
+<!--        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">-->
+<!--            <CheckBox Content="if there are less than" IsChecked="{Binding NotifyOnSc, Mode=TwoWay}"/>-->
+<!--            <TextBox Text="{Binding ScUnitsNotificationCount, Mode=TwoWay}" PreviewTextInput="OnPreviewTextInput" Width="20" Margin="5 0" />-->
+<!--            <TextBlock Text="units in SC"/>-->
+<!--        </StackPanel>-->
 
         <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
             <Button Content="Start" Command="{Binding StartCommand}"/>
