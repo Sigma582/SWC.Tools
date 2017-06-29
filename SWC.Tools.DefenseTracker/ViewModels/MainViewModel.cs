@@ -122,6 +122,7 @@ namespace SWC.Tools.DefenseTracker.ViewModels
             set
             {
                 _notifyAlways = value;
+                SaveToConfig(NOTIFY_ALWAYS, value.ToString());
                 OnPropertyChanged();
             }
         }
@@ -152,7 +153,6 @@ namespace SWC.Tools.DefenseTracker.ViewModels
                     SaveToConfig(LISTENER_PLAYER_SECRET, _messageManager.PlayerSecret);
                 }
 
-                SaveToConfig(NOTIFY_ALWAYS, NotifyAlways.ToString());
                 //SaveToConfig(NOTIFY_ON_PROTECTION, NotifyOnProtection.ToString());
                 //SaveToConfig(NOTIFY_ON_SC, NotifyOnSc.ToString());
                 SaveToConfig(SC_UNITS_NOTIFICATION_COUNT, ScUnitsNotificationCount.ToString());
