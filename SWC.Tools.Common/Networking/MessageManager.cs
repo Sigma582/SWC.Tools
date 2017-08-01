@@ -201,6 +201,7 @@ namespace SWC.Tools.Common.Networking
 
         public WarParticipant GetWarParticipant()
         {
+            CheckInit();
             var message = new Message(true, new GetWarParticipantCommand(PlayerId));
             var result = Send<WarParticipant>(message);
             return result;
@@ -208,6 +209,7 @@ namespace SWC.Tools.Common.Networking
 
         public Player VisitNeighbor(string neighborId)
         {
+            CheckInit();
             var message = new Message(new VisitNeighborCommand(PlayerId, neighborId));
             var result = Send<PlayerWrapper>(message);
             return result.Player;
@@ -215,6 +217,7 @@ namespace SWC.Tools.Common.Networking
 
         public IList<Squad> SearchSquads(string searchString)
         {
+            CheckInit();
             var message = new Message(true, new SearchSquadsCommand(PlayerId, searchString));
             var result = Send<Squad[]>(message);
             return result.ToList();
@@ -222,6 +225,7 @@ namespace SWC.Tools.Common.Networking
 
         public SquadDetails GetSquadDetails(string squadId)
         {
+            CheckInit();
             var message = new Message(true, new GetSquadDetailsCommand(PlayerId, squadId));
             var result = Send<SquadDetails>(message);
             return result;
@@ -229,6 +233,7 @@ namespace SWC.Tools.Common.Networking
 
         public Dictionary<string, Building> UpldateLayout(Dictionary<string, Position> positions)
         {
+            CheckInit();
             var message = new Message(true, new UpldateLayoutCommand(PlayerId, positions));
             var result = Send<Dictionary<string, Building>>(message);
             return result;
@@ -236,6 +241,7 @@ namespace SWC.Tools.Common.Networking
 
         public Dictionary<string, Building> UpdateWarLayout(Dictionary<string, Position> positions)
         {
+            CheckInit();
             var message = new Message(true, new UpdateWarLayoutCommand(PlayerId, positions));
             var result = Send<Dictionary<string, Building>>(message);
             return result;
