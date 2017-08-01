@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWC.Tools.Common", "SWC.Tools.Common\SWC.Tools.Common.csproj", "{2198147D-6A01-4813-8DDF-925E854B8063}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWC.Tools.TestConsole", "SWC.Tools.TestConsole\SWC.Tools.TestConsole.csproj", "{B830A4F6-D2FE-452A-ABF2-DD6CFD545A4D}"

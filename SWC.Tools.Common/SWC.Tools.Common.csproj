@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthData\AuthDataProvider.cs" />
+    <Compile Include="Configuration\ConfigKeys.cs" />
     <Compile Include="Enums\BaseType.cs" />
     <Compile Include="Enums\Server.cs" />
     <Compile Include="Networking\Json\CommandArgs\GeneratePlayerCommandArguments.cs" />
