@@ -12,6 +12,7 @@ using SWC.Tools.Common.Networking.Json.Entities;
 using SWC.Tools.Common.Networking.Json.Messages;
 using SWC.Tools.Common.Networking.Json.Responses;
 using SWC.Tools.Common.Util;
+using System.Configuration;
 
 namespace SWC.Tools.Common.Networking
 {
@@ -26,6 +27,7 @@ namespace SWC.Tools.Common.Networking
         private bool _isLive;
         private int _lastLoginTimeSec;
         private const int RETRY_COUNT_DEFAULT = 3;
+        private const string RETRY_COUNT_KEY = "messageManagerRetryCount";
 
         public bool SkipTimestamp { get; set; }
 
@@ -113,7 +115,17 @@ namespace SWC.Tools.Common.Networking
             Thread.Sleep(2000);
         }
 
-        private TResult Send<TResult>(Message message, int retryCount = RETRY_COUNT_DEFAULT)
+        private TResult Send<TResult>(Message message)
+        {
+            int retryCount;
+            if (!int.TryParse(ConfigurationManager.AppSettings["messageManagerRetryCount"], out retryCount))
+            {
+                retryCount = RETRY_COUNT_DEFAULT;
+            };
+            return Send<TResult>(message, retryCount);
+        }
+
+        private TResult Send<TResult>(Message message, int retryCount)
         {
             CheckInit();
             PrepareMessage(message);
