@@ -12,6 +12,11 @@ using SWC.Tools.Common.MVVM;
 using SWC.Tools.Common.Networking;
 using SWC.Tools.Common.Networking.Json.CommandArgs;
 using SWC.Tools.Common.Networking.Json.Entities;
+using System.Collections.Generic;
+using SWC.Tools.Common.Networking.Exception;
+using SWC.Tools.Common;
+using System.Text;
+using SWC.Tools.Common.Util;
 
 namespace SWC.Tools.LayoutManager.ViewModels
 {
@@ -248,6 +253,8 @@ namespace SWC.Tools.LayoutManager.ViewModels
 
         private void Load(object arg)
         {
+            List<Building> unmappedBuildings = null;
+
             try
             {
                 DisableCommands();
@@ -255,20 +262,46 @@ namespace SWC.Tools.LayoutManager.ViewModels
                 var parameter = (Tuple<string, BaseType>) arg;
 
                 var lm = new LayoutLoader();
-                var layout = lm.Load(parameter.Item1).OrderBy(b => b.X).ThenBy(b => -b.Z).ToList();
+                var savedLayout = lm.Load(parameter.Item1); //.OrderBy(b => b.X).ThenBy(b => -b.Z)
+                var currentLayout = _messageManager.GetOwnBase();
+
+                var match = MapUtil.Match(savedLayout, currentLayout);
+                unmappedBuildings = match.Where(t => t.Item1 == null).Select(t => t.Item2).ToList();
+
+                var newLayout = match.Select(tuple => 
+                {
+                    if (tuple.Item1 != null && tuple.Item2 != null)
+                    {
+                        tuple.Item2.X = tuple.Item1.X;
+                        tuple.Item2.Z = tuple.Item1.Z;
+                    }
+                    return tuple.Item2;
+                });
+
                 if (parameter.Item2 == BaseType.War)
                 {
-                    _messageManager.UpdateWarLayout(layout.ToDictionary(b => b.Key, b => new Position(b.X, b.Z)));
+                    _messageManager.UpdateWarLayout(newLayout.ToDictionary(b => b.Key, b => new Position(b.X, b.Z)));
                 }
                 else
                 {
-                    _messageManager.UpldateLayout(layout.ToDictionary(b => b.Key, b => new Position(b.X, b.Z)));
-                    foreach (var b1 in layout.Where(b => b.Type == Building.BARRACKS || b.Type == Building.FACTORY).OrderByDescending(b => b.Z).ThenBy(b => b.X))
+                    _messageManager.UpldateLayout(newLayout.ToDictionary(b => b.Key, b => new Position(b.X, b.Z)));
+                    foreach (var b1 in newLayout.Where(b => b.Type == Building.BARRACKS || b.Type == Building.FACTORY).OrderByDescending(b => b.Z).ThenBy(b => b.X))
                     {
                         _messageManager.UpldateLayout(new [] { b1 }.ToDictionary(b => b.Key, b => new Position(b.X, b.Z)));
                     }
                 }
                 MessageBox.Show("Layout loaded");
+            }
+            catch (StatusException ex)
+            {
+                if (ex.StatusCode == ServerConstants.BUILDING_OVERLAP_WITH_ANOTHER)
+                {
+                    ProcessStatus1010(unmappedBuildings);
+                }
+                else
+                {
+                    OnError(ex);
+                }
             }
             catch (Exception ex)
             {
@@ -278,6 +311,34 @@ namespace SWC.Tools.LayoutManager.ViewModels
             {
                 EnableCommands();
             }
+        }
+
+        private void ProcessStatus1010(List<Building> unmappedBuildings)
+        {
+            const int buildingsToList = 10;
+
+            var message = new StringBuilder("Can't load layout because one or more buildings overlap with other building(s) and/or junk.");
+            if (unmappedBuildings.Count > 0)
+            {
+                message.AppendLine("\nThe following buildings have no matching structures in the layout file you are loading and can't be moved:");
+
+                for (int i = 0; i < Math.Min(unmappedBuildings.Count, buildingsToList); i++)
+                {
+                    var b = unmappedBuildings[i];
+                    message.AppendFormat("    * {0} level {1}, current location: ({2};{3})\n", b.Type, b.Level, b.X, b.Z);
+                }
+
+                if(unmappedBuildings.Count > buildingsToList)
+                {
+                    message.AppendFormat("    ... and {0} more.\n", unmappedBuildings.Count - buildingsToList);
+                }
+            }
+            var junkCount = _messageManager.GetOwnBase().Count(b => b.IsJunk);
+            if (junkCount > 0)
+            {
+                message.AppendFormat("\nThere {1} {0} junk element{2} in your base.\n", junkCount, junkCount == 1 ? "is" : "are", junkCount == 1 ? "" : "s");
+            }
+            MessageBox.Show(message.ToString());
         }
 
         private void DisableCommands()

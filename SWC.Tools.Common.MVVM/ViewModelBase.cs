@@ -13,7 +13,6 @@ namespace SWC.Tools.Common.MVVM
     public class ViewModelBase : INotifyPropertyChanged
     {
         protected ActionCommand _serverSelectCommand;
-        private const string WINDOWS_URL_KEY = "windowsServerUrl";
         private const string ANDROID_URL_KEY = "androidServerUrl";
 
 
