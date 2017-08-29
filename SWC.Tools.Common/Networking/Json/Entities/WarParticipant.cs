@@ -30,10 +30,10 @@ namespace SWC.Tools.Common.Networking.Json.Entities
         [DataMember(Name = "level")]
         public int Level { get; set; }
 
-        [DataMember(Name = "currentlyDefending")]
+        //[DataMember(Name = "currentlyDefending")]
         public string CurrentlyDefending { get; set; }
 
-        [DataMember(Name = "scoutingStatus")]
+        //[DataMember(Name = "scoutingStatus")]
         public string ScoutingStatus { get; set; }
 
         [DataMember(Name = "id")]
