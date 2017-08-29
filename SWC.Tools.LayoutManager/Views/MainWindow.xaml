@@ -7,7 +7,7 @@
         xmlns:enums="clr-namespace:SWC.Tools.Common.Enums;assembly=SWC.Tools.Common"
         xmlns:converters="clr-namespace:SWC.Tools.Common.MVVM.Converters;assembly=SWC.Tools.Common.MVVM"
         mc:Ignorable="d"
-        Title="SWC Layout Manager v.1.1" Height="200" Width="350" d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
+        Title="SWC Layout Manager v.1.2" Height="200" Width="350" d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
         ResizeMode="CanMinimize">
     <Window.Resources>
         <Style TargetType="Button">
