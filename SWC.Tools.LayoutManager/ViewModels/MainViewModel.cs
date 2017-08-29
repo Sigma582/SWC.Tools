@@ -28,6 +28,7 @@ namespace SWC.Tools.LayoutManager.ViewModels
         private readonly ActionCommand _saveLayoutCommand;
         private readonly ActionCommand _loadLayoutCommand;
         private readonly ActionCommand _loginCommand;
+        private readonly ActionCommand _gameroomCredentialsCommand;
         private string _playerprefsPath;
         private string _playerName;
         private MessageManager _messageManager;
@@ -65,10 +66,14 @@ namespace SWC.Tools.LayoutManager.ViewModels
         {
             get { return _loadLayoutCommand; }
         }
-
         public ICommand LoginCommand
         {
             get { return _loginCommand; }
+        }
+
+        public ICommand GameroomCredentialsCommand
+        {
+            get { return _gameroomCredentialsCommand; }
         }
 
         public Player Player
@@ -101,16 +106,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
             }
         }
 
-        public bool CanAdjustTimestamp
-        {
-            get { return _canAdjustTimestamp; }
-            set
-            {
-                _canAdjustTimestamp = value;
-                OnPropertyChanged();
-            }
-        }
-
         public string PlayerId
         {
             get { return _playerId; }
@@ -138,6 +133,7 @@ namespace SWC.Tools.LayoutManager.ViewModels
             _saveLayoutCommand = new ActionCommand(SaveCommandHandler);
             _loadLayoutCommand = new ActionCommand(LoadCommandHandler);
             _loginCommand = new ActionCommand(LoginByPlayerId, true);
+            _gameroomCredentialsCommand = new ActionCommand(GetGameroomCredentials, true);
 
             ReadConfig();
         }
@@ -154,6 +150,32 @@ namespace SWC.Tools.LayoutManager.ViewModels
             SaveToConfig(LAST_PLAYER_ID_KEY, PlayerId);
             SaveToConfig(LAST_PLAYER_SECRET_KEY, PlayerSecret);
             ThreadPool.QueueUserWorkItem(Login, authData);
+        }
+
+        private void GetGameroomCredentials(object arg)
+        {
+            var reg = Registry.CurrentUser.OpenSubKey(@"Software\The Walt Disney Company\Commander");
+
+            if (reg == null)
+            {
+                MessageBox.Show("Can't get login data from FB Gameroom.");
+                return;
+            }
+
+            var playerIdBytes = reg.GetValue(reg.GetValueNames().FirstOrDefault(name => name.StartsWith("prefPlayerId")));
+            var playerSecretBytes = reg.GetValue(reg.GetValueNames().FirstOrDefault(name => name.StartsWith("prefPlayerSecret")));
+
+            if (playerIdBytes == null || playerSecretBytes == null)
+            {
+                MessageBox.Show("Can't get login data from FB Gameroom.");
+                return;
+            }
+
+            var playerId = Encoding.UTF8.GetString((byte[])playerIdBytes);
+            var playerSecret = Encoding.UTF8.GetString((byte[])playerSecretBytes);
+
+            PlayerId = playerId.Substring(0, playerId.Length - 1);
+            PlayerSecret = playerSecret.Substring(0, playerSecret.Length - 1);
         }
 
         private void Login(object arg)
@@ -343,12 +365,12 @@ namespace SWC.Tools.LayoutManager.ViewModels
 
         private void DisableCommands()
         {
-            Application.Current.Dispatcher.Invoke(() => CanAdjustTimestamp = _saveLayoutCommand.Enabled = _loadLayoutCommand.Enabled = false);
+            Application.Current.Dispatcher.Invoke(() => _saveLayoutCommand.Enabled = _loadLayoutCommand.Enabled = _gameroomCredentialsCommand.Enabled = false);
         }
 
         private void EnableCommands()
         {
-            Application.Current.Dispatcher.Invoke(() => CanAdjustTimestamp = _saveLayoutCommand.Enabled = _loadLayoutCommand.Enabled = true);
+            Application.Current.Dispatcher.Invoke(() => _saveLayoutCommand.Enabled = _loadLayoutCommand.Enabled = _gameroomCredentialsCommand.Enabled = true);
         }
 
         private void OnLoginSuccessful()
@@ -362,5 +384,6 @@ namespace SWC.Tools.LayoutManager.ViewModels
                 }
             });
         }
+        
     }
 }
