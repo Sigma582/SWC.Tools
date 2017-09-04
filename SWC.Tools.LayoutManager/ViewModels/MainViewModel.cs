@@ -200,6 +200,19 @@ namespace SWC.Tools.LayoutManager.ViewModels
             }
         }
 
+        private void Refresh()
+        {
+            try
+            {
+                _messageManager.Refresh();
+                Player = _messageManager.GetLoginData();
+            }
+            catch (Exception ex)
+            {
+                OnError(ex);
+            }
+        }
+
         private void SaveCommandHandler(object arg)
         {
             if (Player == null)
@@ -231,7 +244,7 @@ namespace SWC.Tools.LayoutManager.ViewModels
 
                 var parameter = (Tuple<string, BaseType>) arg;
 
-                _messageManager.Refresh();
+                Refresh();
                 var buildings = parameter.Item2 == BaseType.War
                     ? _messageManager.GetWarParticipant().WarMap.Buildings
                     : Player.PlayerModel.Map.Buildings;
