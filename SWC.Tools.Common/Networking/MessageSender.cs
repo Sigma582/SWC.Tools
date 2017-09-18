@@ -56,7 +56,7 @@ namespace SWC.Tools.Common.Networking
                     Method = HttpMethod.Post,
                     Content = content
                 };
-                request.Headers.Authorization = new AuthenticationHeaderValue("FD", "0740BD33-E5E9-4CB3-8D46-97D2AFC306E0:18AB7595FC6717FEE9A81431BC66476B9B5E06AAB9BE83EB");
+                request.Headers.Authorization = new AuthenticationHeaderValue("GAE", "54690BA3-45EF-4CEF-9A75-F30314596815");
 
                 //var response = await client.PostAsync(_url, content);
                 var response = await client.SendAsync(request);
