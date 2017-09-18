@@ -9,7 +9,7 @@
         xmlns:converters="clr-namespace:SWC.Tools.DefenseTracker.Converters"
         xmlns:converters1="clr-namespace:SWC.Tools.Common.MVVM.Converters;assembly=SWC.Tools.Common.MVVM"
         mc:Ignorable="d"
-        Title="SWC Defence tracker" d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
+        Title="SWC Defence tracker v.1.1" d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
         SizeToContent="WidthAndHeight"
         ResizeMode="CanMinimize">
     <Window.Resources>
